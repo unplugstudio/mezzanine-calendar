@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+	<form action="" method="POST" id="import-url-form">
+		{% csrf_token %}
+		<label for="event-url">Event URL</label>
+		<input id="event-url" type="url" name="event-url" required>
+		<input class="default" type="submit" value="Import Event">
+	</form>
+
+	<script>
+		// Disable the button and show a message when the form is submitted
+		var form = document.querySelector('#import-url-form')
+		var btn = form.querySelector('[type="submit"]')
+		var title = document.querySelector('#content > h1')
+		form.addEventListener('submit', function(event) {
+			btn.style.display = 'none'
+			title.textContent = 'Importing... Please wait'
+		})
+	</script>
+{% endblock content %}
