@@ -94,7 +94,7 @@ class EventImportMixin(object):
         event.user = user
 
         if not event.location:
-            event.location = data["fields"].get("address", "")
+            event.location = data["fields"].get("location_title", "")
 
         # Get the original featured image and save it locally
         img_path = data["fields"].get("featured_image")
