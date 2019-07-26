@@ -39,6 +39,11 @@ class EventAdmin(DisplayableAdmin, OwnableAdmin, EventImportMixin):
     list_display = ["admin_thumb", "title", "featured", "user", "status"]
     list_editable = ["featured"]
 
+    class Media:
+        css = {
+            "all": ("mezzanine_events/event_admin.css",)
+        }
+
     def save_form(self, request, form, change):
         """
         Super class ordering is important here - user must get saved first.

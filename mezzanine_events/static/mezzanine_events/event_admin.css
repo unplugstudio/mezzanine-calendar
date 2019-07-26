@@ -1,0 +1,5 @@
+.dynamic-occurrences .vDateField,
+.dynamic-occurrences .vTimeField,
+.dynamic-occurrences select {
+  max-width: 75px !important;
+}
