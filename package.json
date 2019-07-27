@@ -1,3 +1,8 @@
 {
-    "version": "0.1.0"
+    "name": "mezzanine-events",
+    "private": true,
+    "version": "0.2.0",
+    "devDependencies": {
+        "conventional-changelog-cli": "^2.0.21"
+    }
 }

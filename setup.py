@@ -17,7 +17,6 @@ with open("README.rst", encoding="utf-8") as f:
     long_description = f.read()
 
 # Bump version and generate CHANGELOG
-# npm install -g conventional-changelog-cli
 if sys.argv[:2] == ["setup.py", "bump"]:
     try:
         subprocess.check_call("bump2version %s" % sys.argv[2])
