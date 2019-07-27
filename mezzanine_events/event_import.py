@@ -39,7 +39,7 @@ class EventImportMixin(object):
     Imports events from other sites by their URL.
     """
 
-    template_name = "admin/mezzanine_calendar/event/import.html"
+    template_name = "admin/mezzanine_events/event/import.html"
 
     def get_event_data(self, event_url):
         """

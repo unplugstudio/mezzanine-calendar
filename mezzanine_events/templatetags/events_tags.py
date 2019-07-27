@@ -42,7 +42,10 @@ def google_calendar_url(dt):
 
 @register.simple_tag(takes_context=True)
 def upcoming_occurrences(
-    context, category_slug=None, limit=5, template="calendar/includes/upcoming_occurrences.html"
+    context,
+    category_slug=None,
+    limit=5,
+    template="mezzanine_events/includes/upcoming_occurrences.html",
 ):
     """
     Return a limited number of upcoming event occurrences.

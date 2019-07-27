@@ -24,7 +24,7 @@ def month_redirect(request):
     """
     Redirect to the grid for the current month.
     """
-    return redirect("calendar:event_grid", *today().strftime("%Y %m").split())
+    return redirect("mezzanine_events:event_grid", *today().strftime("%Y %m").split())
 
 
 def event_grid(request, year, month):
@@ -56,7 +56,7 @@ def event_grid(request, year, month):
         "next_month": current_month + timedelta(days=+days_in_month),
         "calendar": [[(dt, by_day.get(dt, [])) for dt in week] for week in cal],
     }
-    return render(request, "calendar/event_grid.html", context)
+    return render(request, "mezzanine_events/event_grid.html", context)
 
 
 def event_list(request):
@@ -96,23 +96,27 @@ def event_list(request):
         "featured_occurrences": featured_occurrences,
         "occurrences": regular_occurrences,
     }
-    return render(request, "calendar/event_list.html", context)
+    return render(request, "mezzanine_events/event_list.html", context)
 
 
-def event_detail(request, slug, template="calendar/event_detail.html"):
+def event_detail(request, slug):
     """
-    Detail page for an event
+    Detail page for an event.
     """
+    templates = [
+        "mezzanine_events/event_detail_{}.html".format(slug),
+        "mezzanine_events/event_detail.html",
+    ]
+    if request.is_ajax():
+        templates.insert(0, "mezzanine_events/event_detail_ajax.html")
+
     events = Event.objects.published(for_user=request.user).select_related()
     event = get_object_or_404(events, slug=slug)
-    templates = ["event/event_detail_{}.html".format(slug), template]
-    if request.is_ajax():
-        templates.insert(0, "calendar/event_detail_ajax.html")
 
     context = {
         "event": event,
         "editable_obj": event,
         "filter_form": ListFilterForm(),
-        "filter_form_url": reverse("calendar:event_list"),
+        "filter_form_url": reverse("mezzanine_events:event_list"),
     }
     return render(request, templates, context)

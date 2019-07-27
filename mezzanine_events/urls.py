@@ -5,10 +5,10 @@ from django.views.generic import RedirectView
 
 from . import views
 
-app_name = "mezzanine_calendar"
+app_name = "mezzanine_events"
 
 urlpatterns = [
-    url(r"^$", RedirectView.as_view(pattern_name="mezzanine_calendar:event_list"), name="home"),
+    url(r"^$", RedirectView.as_view(pattern_name="mezzanine_events:event_list"), name="home"),
     url(r"^month/$", views.month_redirect, name="month"),
     url(r"^list/$", views.event_list, name="event_list"),
     url(r"^event/(?P<slug>.*)/$", views.event_detail, name="event_detail"),

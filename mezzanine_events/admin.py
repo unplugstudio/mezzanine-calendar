@@ -40,9 +40,7 @@ class EventAdmin(DisplayableAdmin, OwnableAdmin, EventImportMixin):
     list_editable = ["featured"]
 
     class Media:
-        css = {
-            "all": ("mezzanine_events/event_admin.css",)
-        }
+        css = {"all": ("mezzanine_events/event_admin.css",)}
 
     def save_form(self, request, form, change):
         """

@@ -17,8 +17,7 @@ from .utils import duration_info
 
 class Event(BaseEvent, Displayable, Ownable, RichText, AdminThumbMixin):
     """
-    Events that get displayed in the calendar.  Start and end represent the range
-    of times the event should cover in the calendar.
+    Basic information related to an event.
     """
 
     categories = models.ManyToManyField(
