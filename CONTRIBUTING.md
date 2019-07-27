@@ -44,14 +44,20 @@ Please use the [Angular commit format] in your pull requests. This keeps the com
 
 ## Publishing to PyPI
 
-This is intended for project maintainers with publish access to PyPI. As a contributor you won't be required to do this.
+*This is intended for project maintainers with publish access to PyPI. As a contributor you won't be required to do this.*
+
+### 1. Bump the version
+
+- Install `bump2version` from PyPI
+- Install `conventional-changelog` from npm
+- Run `python setup.py bump <version type>`. `<version type>` can be `major`, `minor`, or `patch` as defined by [Semantic Versioning]. This will create a new git tag and changelog entries.
+
+### 3. Upload to PyPI
 
 ```bash
-rm -rf dist/
-python setup.py sdist
-python setup.py bdist_wheel
-twine upload dist/*
+python setup.py release
 ```
 
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [Angular commit format]: https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commit-message-format
+[Semantic Versioning]: https://semver.org/
