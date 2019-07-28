@@ -1,3 +1,17 @@
+# [0.3.0](https://github.com/unplugstudio/mezzanine-events/compare/v0.2.0...v0.3.0) (2019-07-28)
+
+
+### Bug Fixes
+
+* fix event importter ([2e755b3](https://github.com/unplugstudio/mezzanine-events/commit/2e755b3))
+
+
+### Features
+
+* add JSON event view ([263dc51](https://github.com/unplugstudio/mezzanine-events/commit/263dc51))
+
+
+
 # [0.2.0](https://github.com/unplugstudio/mezzanine-events/compare/v0.1.0...v0.2.0) (2019-07-27)
 
 
