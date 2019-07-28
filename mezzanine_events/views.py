@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.timezone import make_aware, localtime, now
 
+from mezzanine.conf import settings
 from mezzanine.utils.views import paginate
 
 from .forms import GridFilterForm, ListFilterForm
@@ -85,14 +86,14 @@ def event_list(request):
     featured_occurrences = paginate(
         list(occurrences.filter(event__featured=True).all_occurrences(start, end)),
         page_num=request.GET.get("featured-page", 1),
-        per_page=15,
-        max_paging_links=10,
+        per_page=settings.EVENTS_FEATURED_PER_PAGE,
+        max_paging_links=settings.MAX_PAGING_LINKS,
     )
     regular_occurrences = paginate(
         list(occurrences.filter(event__featured=False).all_occurrences(start, end)),
         page_num=request.GET.get("page", 1),
-        per_page=15,
-        max_paging_links=10,
+        per_page=settings.EVENTS_PER_PAGE,
+        max_paging_links=settings.MAX_PAGING_LINKS,
     )
 
     context = {
