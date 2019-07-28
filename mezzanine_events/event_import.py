@@ -5,7 +5,6 @@ import os
 import requests
 
 from bs4 import BeautifulSoup
-from datetime import datetime, date, time
 from requests.exceptions import RequestException
 from urlparse import urlparse, urljoin, unquote
 
@@ -14,20 +13,12 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.serializers import deserialize
 from django.shortcuts import render, redirect
-from django.utils.timezone import make_aware
 
 from mezzanine.utils.admin import admin_url
 from mezzanine.utils.sites import current_site_id
 
 from .models import Event
-
-
-def combine(d, t):
-    if not isinstance(d, date):
-        d = datetime.strptime(d, "%Y-%m-%d").date()
-    if not isinstance(t, time):
-        t = datetime.strptime(t, "%H:%M:%S").time()
-    return make_aware(datetime.combine(d, t))
+from .utils import convert
 
 
 class EventImportError(Exception):
@@ -85,9 +76,9 @@ class EventImportMixin(object):
         The featured image will be retrieved from the original server
         and the EventDateTime instances will be attached.
         """
-        items = deserialize("json", json.dumps([data]), ignorenonexistent=True)
-        deserialized = list(items)[0]
-        event = deserialized.object
+        converted = convert(data)
+        items = deserialize("json", json.dumps([converted]), ignorenonexistent=True)
+        event = list(items)[0].object
         event.id = None  # Ensure new event ID
         event.slug = event.generate_unique_slug()
         event.site_id = current_site_id()
@@ -109,17 +100,17 @@ class EventImportMixin(object):
                 event.featured_image = filepath
 
         # Discard all M2M data as it may cause integrity issues when saving
-        deserialized.m2m_data = {}
+        event.m2m_data = {}
         # Commit the new event to the database (required before saving EventDateTimes)
-        deserialized.save()
+        event.save()
 
-        # Add EventDateTimes instances
-        for dt in data["dateandtimes"]:
-            f = dt["fields"]
-            event.occurrences.create(
-                start=combine(f["day"], f["start_time"] or datetime.min.time()),
-                end=combine(f["day"], f["end_time"]) if f.get("end_time") else None,
-            )
+        # Add EventDateTimes instances (for old Mezzanine Calendar objects)
+        for dt in data.get("dateandtimes", []):
+            dt = convert(dt)
+            occ = deserialize("json", json.dumps([dt]), ignorenonexistent=True)
+            occ = list(occ)[0].object
+            occ.event = event
+            occ.save()
 
         return event
 
