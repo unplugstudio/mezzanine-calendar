@@ -10,7 +10,7 @@ from django.core.serializers import serialize
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.utils.timezone import make_aware, localtime
+from django.utils.timezone import make_aware, localtime, now
 
 from mezzanine.utils.views import paginate
 
@@ -77,6 +77,10 @@ def event_list(request):
         occurrences = form.filter(occurrences)
         start = form.cleaned_data["start_day"]
         end = form.cleaned_data["end_day"]
+
+    # Adjust to include the current time if start is set to today
+    if start == today():
+        start = now()
 
     featured_occurrences = paginate(
         list(occurrences.filter(event__featured=True).all_occurrences(start, end)),
