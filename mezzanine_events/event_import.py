@@ -112,6 +112,12 @@ class EventImportMixin(object):
             occ.event = event
             occ.save()
 
+        # Import occurrences (if available)
+        for occ_data in data.get("occurrences", []):
+            occ = occ_data["fields"].copy()
+            occ.pop("event")
+            event.occurrences.create(**occ)
+
         return event
 
     def import_from_url(self, request):

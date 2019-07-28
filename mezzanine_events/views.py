@@ -1,10 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
+import json
+
+from calendar import Calendar
 from datetime import datetime, timedelta
 from itertools import groupby
 
-from calendar import Calendar
+from django.core.serializers import serialize
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.timezone import make_aware, localtime
 
@@ -120,3 +124,14 @@ def event_detail(request, slug):
         "filter_form_url": reverse("mezzanine_events:event_list"),
     }
     return render(request, templates, context)
+
+
+def event_json(request, pk):
+    """
+    Returns a JSON representation of an Event.
+    Other sites can use this endpoint to import events.
+    """
+    event = get_object_or_404(Event.objects.published(), pk=pk)
+    event_dict = json.loads(serialize("json", [event]))[0]
+    event_dict["occurrences"] = json.loads(serialize("json", event.occurrences.all()))
+    return HttpResponse(json.dumps(event_dict), content_type="application/json")
